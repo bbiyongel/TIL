@@ -1,0 +1,15 @@
+https://www.straitstimes.com/multimedia/graphics
+
+이수진
+
+fundamentals of data visualization
+https://serialmentor.com/dataviz
+
+bokeh
+
+https://docs.bokeh.org/en/latest/
+https://github.com/bokeh/bokeh-notebooks
+https://github.com/bokeh/bokeh/tree/master/examples/app
+
+
+>bokeh sampledata

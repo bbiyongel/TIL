@@ -1,0 +1,27 @@
+
+앙상블의 앙상블 효과 우수
+
+중요도 변수
+- 양, 음 얼마나 정도인지는 모르고 중요도의 대략적인정도만 유추 가능
+
+
+1. xgboost
+
+오분류에 가중치 적용
+에러 최소화
+앙상블 모델
+
+gradient boost 비해 정규화를 통해 overfiting을 방지
+캐글 대회에서 우승 알고리즘으로 부각됨
+
+
+2. lightGBM
+- xgboost 보다 더 leaf를 내릴수 있음
+- overfiting 날 확율 큼 , 대량학습 필요
+- xgboost보다 2배 이상 빠름 
+ : 성능이슈때문에 보통 xgboost보다 lightGBM권장함
+
+ 
+ 3. catboost
+- category 예측에 좋음(보통 one hot encoding하면 변수가 늘어나는데..)
+- 샘플링 안된 데이터의 잔차 분산 최소화 통해 bias 피함

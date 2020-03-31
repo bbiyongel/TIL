@@ -1,0 +1,317 @@
+import matplotlib.pyplot as plt
+import seborn as sns
+sns.set()
+
+df = sns.load_dataset("flights")
+df.shape
+df.info
+df.head()
+
+
+#barplot
+plt.figure(figsize=(15,4)
+sns.barplot(data = df, x='year', y='passengers', ci='sd')
+
+#검은색바는 신뢰구간, ci=sd는 표준편차(stddev) 
+
+#lineplot
+plt.figure(figsize=(15,4))
+sns.lineplot(data = df, x='year', y='passengers', ci='sd')
+
+
+
+#pointplot
+plt.figure(figsize=(15,4))
+sns.pointplot(data = df, x='year', y='passengers', ci='sd')
+
+
+#hue
+plt.figure(figsize=(15,4))
+sns.lineplot(data = df, x='year', y='passengers', hue='month')
+plt.legend(bbox_to_anchor=(1.02,1), loc=2, boarderaxespad=0.
+
+
+plt.figure(figsize=(15,4))
+sns.lineplot(data = df, x='month', y='passengers', hue='year')
+plt.legend(bbox_to_anchor=(1.02,1), loc=2, boarderaxespad=0.
+
+
+#
+plt.figure(figsize=(15,4))
+sns.boxplot(data=df , x='year', y='passengers')
+
+sns.boxenplot(data=df , x='year', y='passengers')
+
+sns.violinplot(data=df , x='year', y='passengers')
+
+sns.swarmplot(data=df , x='year', y='passengers')
+
+
+sns.boxplot(data=df , x='month', y='passengers')
+
+# 회귀선
+sns.regplot(data=df , x='year', y='passengers')
+
+
+# pivot으로 형태바꾸기
+
+dfh= df.pivot(index='year', columns='month', values='passengers')
+
+plt.figure(figsize=(15,5))
+sns.heatmap(dfh, annot=True, fmt='.0f', cmap='Blues')
+
+sns.pairplot(data=df, hue='month')
+sns.distplot(dfh['passengers'])
+
+#######
+sns.relplot(data=df, x='month', y='passengers', kind='line', hue='year', col='year', col_wrap=4)
+
+
+#### datetime 형식으로 변환
+
+year=2020
+month="March"
+
+
+
+
+def find_datetime(row):
+	year = row["year"]
+	month = row["month"]
+	
+	s = f"{year}{month} 1"
+	d = datetime.strptime(s, "%Y %B %d")
+	
+	return d.strftime("%Y-%m-%d")
+
+row = {"year":1949, "month":"January"}
+find_datetime(row)
+
+
+df["date"] = df.apply(find_datetime, axis=1)	
+df["date"] = pd.to_datetime(df["date"])
+df["date"].head(1)
+
+#axis=0 은행기준, axis=열기준
+
+
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters
+plt.figure(figsize=(15,5))
+sns.lineplot(data=df, x='date', y='passengers')
+
+
+# statmodels
+# Time Series data Decomposition(시계열데이터 분해)
+ - Trend
+ - Seasonal
+ - Residual(random, remainder)
+
+kk = df[["date"],["passengers"]].set_index("date")
+kk.head()
+
+
+fromm statmodels.tsa.seasonal iport seasonal_decompose
+
+decomp = seasonal_decompose(kk, model="additive")	
+decomp.plot()
+d = decomp.plot()
+
+
+# multicative model
+decomp = seasonal_decompose(kk, model="multiplicative")	
+decomp.plot()
+
+# pairgrid plot 법주형 변수들 모두 한꺼번에 비교
+import seaborn as sns
+sns.set(style="whitegrid")
+%matplotlib inline
+
+tatinic = sns.load_dataset("titanic")
+tatinic.shape 
+
+g = sns.PairGrid(titinic, y_vars="survived",
+				x_vars=["class","sex","who",alone"],
+				height=5, aspect=.5)
+
+g.map(sns.pointplot, scale=1.3, errwidth=4, color="xkcd:plum")
+g.set(ylim=(0,1))
+sns.despine(fig=g.fig, left=True)
+
+
+
+# anscombe's quartet
+# 통계 분포가 똑같지만 시각화했을때 완전히 다른 4개 데이터 
+sns.set(style="ticks")
+sns.set(style="whitegrid")
+sns.set(style="white", context='talk')
+sns.set(style="white", context='notebook') # font약간 작아짐
+sns.set(style="whitegrid", palette='pastel', color_codes=True)
+sns.set(style="whitegrid", palette='muted')
+
+sns.lmplot(data=df, x=, y=, hue='dataset', ,ci=None, col='dataset' )
+# ci는 컨피던스 인터벌 신뢰구간을 ㅇ조정. 50이면 양극단 50만 제외, 100은 모두 표시, 95퍼센트 신뢰구간
+# col_wrap=2 2개씩 표시 
+# pallete ='mutied'
+# height 높이 
+# scatter_kws ={s=50, alpha = 0.5}   # 알파는 투명도, s=원크기
+
+
+sns.regplot #hue옵션없음
+
+
+
+#신뢰구간
+
+# 상관계수
+df.corr()
+
+
+#barplot
+# color pallete choise
+
+np.random.RandomState(10)
+
+sns.barplot(pallete="rockets").axhline(0,color='k', clip_on=False)  #k검정색, r빨강, b파란색
+pallete="vlag"  # +, - 값 있을때 효과적
+pallete="deep"
+
+
+sns.dispine(bottom=True)  #테두리 지움
+
+
+ax3.set_ylabel("xxx")
+
+plt.setp(f.axes, ytics=[])
+
+
+
+df.sample()
+
+sns.violinplot? #한쪽은 수치, 한쪽은 카테고리
+
+sns.violinplot(split=True, inner='quart)
+sns.boxplot(hue='컬럼명', order=["a","b"], dodge=False)
+
+sns.despine(left=True)
+
+#주말파생
+tips['weekend'] = tips['day'].isin(['Sat','Sun'])
+
+
+# seaborn fontsize
+
+
+df.pivottable
+
+pal = sns.cubehelix_palette(p, rot=-.5, dark=.3)
+sns.palplot(pal)
+sns.violinplot(data=d, palette=pal, inner="point")
+
+
+pd.melt(iris, "species", var_name ='mesurement') #melt는 행으로 되어있는 값들을 아래로 값으로 담았다
+
+sns.scatterplot(s='mesurement',y='values', data=iris)
+
+sns.swarmplot()
+
+
+.cumsum(axis=0)
+
+date.rolling(7).mean() #7일간 이동평균값
+
+sns.lineplot(data=df, palette='tab10',linewidth=2.5)
+
+
+scatterplot(size, sizes=[1,8], linewidth=0, )
+
+
+sns.boxenplot(scale="linear", color='b')
+
+
+sns.boxplot(order='', )
+
+
+
+sns.scatterplot(x=x,y=y)
+
+sns.regplot()
+
+sns.residplot(x,y, lowess=True, color='g')
+
+
+
+# diagonal
+
+
+from import ascii_letters
+
+#correlation 상관분석
+#피어슨상관계수 : x,y함께 변하는 정도/ x,y가 함께 변하는 정도. 두변간 연관관계임. 인과관계는 아님
+#스피어만 
+corr = df.corr()
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True 
+mask[:,2]
+cmap = sns.diverging)palette(220, 10, as_cmap=True)
+
+sns.heatmap(corr , mask=mask, cmap='Blues'  , char_kws{'shrink':.5}, annot=True, fmt=".1f")
+                                   'Reds'
+								   cmap , center=0, vmax=.3, squre=True, linewidths, 
+
+
+#kdeplot : 등고선 
+
+
+setosa = iris.query("spec"=='sec')
+vir = iris.query("spec"=='vir')
+
+vir.describe()
+
+sns.distplot(vir['aa'])
+
+# 확률밀도함수 : 적분했을때 1이 나옴 }
+sns.kdeplot(vir['aa'])
+sns.kdeplot(setosa['aa'])
+
+#같이 그리면 좋다.
+f, ax = plt.subplots(figsize=(8,8))
+ax.set_aspect("equal")
+
+ax = sns.kdeplot(setosa['aa'], setosa['bb'],cmap='red',  shade=True, shade_lowest=False)
+sns.scatter()
+ax = sns.kdeplot(vir['aa'], vir['bb'], cmap='blue', shade=True, shade_lowest=False)
+sns.scatter()
+ax.text(3,5, "test", size=16, color=blue)
+
+
+# 3-way anova(analysis of variable:분산분석=두개이상 집단 비교, 각 집단의 분산,평균의 차이를 분석)
+# 1원분산분석 : 한중일 국가간 10세 남아의 체중비교 (독립변인:10세남아, 집단:한중일, 종속:체중)
+# 2원분산분석 : 한중일 국가간 성별/학력에 따른 체중비교(독립변인:2개-학력/성별, 집단:한중일, 종속:체중)
+# 다원변량분산분석(manova)
+# 공분산분석 : 
+sns.pointplot(data,x,y,hue, ci='sd') #ci 신뢰구간 sd 표준편차 
+sns.catplot(ㅌ,y,hue,col,capsize=.1,palette,kind)='point,violin,bar')
+
+df.kind.value_counts()
+
+
+sns.pairplot 
+
+g = sns.PairGrid(df, hue='kind', diag_sharey=Flase)
+
+g.map(sns.scatterplot)
+g.map_lower(sns.kdeplot)
+g.map_upper(sns.scatterplot)
+g.map_diag(sns.kdeplot)
+
+
+
+
+
+
+
+
+
+
+

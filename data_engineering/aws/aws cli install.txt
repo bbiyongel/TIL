@@ -1,0 +1,5 @@
+pip install awscli --upgrade --user
+
+aswcli 설치하면 아래 명령어가 command 창에서 실행가능
+aws configure
+

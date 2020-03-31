@@ -1,0 +1,17 @@
+https://www.youtube.com/watch?v=NaEP2bVrM7U&list=PL9mhQYIlKEhci1N4FUbDOUacHl4KHCEOX
+한남대 권세혁 교수님
+
+빅데이터 시대 샘플, 표본 의미 없어짐
+지금은 전체정보가 중요함. 치우침 이런것도 정보임 
+
+평균 vs 중앙값 
+예전) 모집단 평균값 추론 : 분포를 알아야함 - 이론 : 중심극한정리 : 평균은 정규분포
+
+
+
+국가 : 주민번호 연계하기 어려워 예측모델 만들기 힘듬
+
+http://wolfpack.hnu.ac.kr/Big_Data/bigdata_index.html
+
+http://www.seanlahman.com/baseball-archive/statistics
+

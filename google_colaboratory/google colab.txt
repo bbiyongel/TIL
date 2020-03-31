@@ -1,0 +1,5 @@
+https://colab.research.google.com/notebooks/welcome.ipynb#scrollTo=GJBs_flRovLc
+
+ctrl + shift + p : short cut 단축키 
+
+
