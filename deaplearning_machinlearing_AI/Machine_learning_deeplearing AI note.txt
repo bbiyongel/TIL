@@ -25,3 +25,11 @@ gradient boost 비해 정규화를 통해 overfiting을 방지
  3. catboost
 - category 예측에 좋음(보통 one hot encoding하면 변수가 늘어나는데..)
 - 샘플링 안된 데이터의 잔차 분산 최소화 통해 bias 피함
+
+
+kmeans 평가방법
+
+1.elbow
+distortions.append(km.inertia_)
+
+2.실루엣 
