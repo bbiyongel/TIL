@@ -4,3 +4,6 @@ https://byeongkijeong.github.io/ARIMA-with-Python/
 
 https://otexts.com/fppkr/missing-outliers.html
 
+
+github.com/midnighttradio/tsa-tutorial.git
+
