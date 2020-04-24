@@ -1,2 +1,6 @@
 arima
 
+https://byeongkijeong.github.io/ARIMA-with-Python/
+
+https://otexts.com/fppkr/missing-outliers.html
+
