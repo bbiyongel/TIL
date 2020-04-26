@@ -195,6 +195,49 @@ df[2018:][['close','close20','upper','lower']].plot(figsize=(15,7))
 
 # time zone 
 
+from datetime import datetime 
+from datetime import timezone
+
+timezone.utc 
+
+datetime(2019,1,1) #unawared
+
+datetime(2019,1,1,tzinfo=timezone.utc) #awared
+
+!conda install pytz
+
+import pytz 
+
+pytz.utc 
+
+pytz.all_timezones
+
+kst = pytz.timezone('Asia/Seoul')
+
+datetime(2019,1,1,tzinfo=timezone.utc)==pytz.UTC.localize(datetime(2019,1,1))
+True
+
+kst.localize(datetime(2019,1,1))
+
+datetime(2019,1,1,tzinfo=timezone.utc)==\
+kst.localize(datetime(2019,1,1))
+False
+
+mydate = datetime(2019,1,1)
+
+mydate.replace(year=2018)
+
+mydate.replace(tzinfo=kst) # 이건 잘안됨. 아래처럼 localize로 변경해야됨 
+
+mydate_kst = kst.localize(mydate)
+
+
+
+
+
+
+
+
 
 
 
