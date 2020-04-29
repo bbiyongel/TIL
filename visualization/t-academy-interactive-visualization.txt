@@ -13,3 +13,5 @@ https://github.com/bokeh/bokeh/tree/master/examples/app
 
 
 >bokeh sampledata
+
+https://zzsza.github.io/development/2018/08/24/data-visualization-in-python/
