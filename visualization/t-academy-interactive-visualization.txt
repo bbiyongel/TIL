@@ -15,3 +15,14 @@ https://github.com/bokeh/bokeh/tree/master/examples/app
 >bokeh sampledata
 
 https://zzsza.github.io/development/2018/08/24/data-visualization-in-python/
+
+https://towardsdatascience.com/how-to-visualize-data-on-top-of-a-map-in-python-using-the-geoviews-library-c4f444ca2929
+
+
+
+https://towardsdatascience.com/how-to-create-an-interactive-geographic-map-using-python-and-bokeh-12981ca0b567
+
+https://geocoder.readthedocs.io/providers/Gaode.html
+
+https://lbs.amap.com/api/webservice/guide/api/georegeo
+
