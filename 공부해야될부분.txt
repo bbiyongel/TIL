@@ -13,3 +13,5 @@ https://www.youtube.com/watch?v=IOxZwHlomx4&list=PLaTc2c6yEwmo9MZi-0OLi8F6bM6AA0
 딥러닝 - 블록 t아카데미 
 
 탈잉 한번 체크
+
+OCR 딥러닝
