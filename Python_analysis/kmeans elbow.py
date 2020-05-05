@@ -29,3 +29,40 @@ http://blog.naver.com/PostView.nhn?blogId=samsjang&logNo=221017639342&categoryNo
 
 #파이썬 중급자 책
 https://winterj.me/python-books-for-intermediate/
+
+# lovit 
+https://lovit.github.io/machine%20learning/2019/03/17/attention_in_nlp/
+
+# naver deview 
+https://deview.kr/2019/schedule
+
+# ocr 
+https://github.com/parksunwoo/ocr_kor
+
+https://www.kakaobrain.com/blog/50
+
+
+# data분석 link 
+https://github.com/parksunwoo/TIL/tree/master/bookmark
+
+# ratsgo's blog 
+https://ratsgo.github.io/blog/
+
+# wiki book 
+https://wikidocs.net/31379
+https://wikidocs.net/33930
+
+
+# practical python 
+https://github.com/dipanjanS/practical-machine-learning-with-python
+
+# ratsgo github 
+https://github.com/ratsgo/embedding/issues/1
+https://github.com/ratsgo/nlpbook/blob/master/index.md
+https://github.com/ratsgo/ratsgo.github.io
+
+# 한국어 임베딩 
+https://ratsgo.github.io/embedding/
+
+# 고객세분화 revision 
+https://www.youtube.com/watch?v=cgV_BFavkxU
