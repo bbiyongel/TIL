@@ -66,3 +66,4 @@ https://ratsgo.github.io/embedding/
 
 # 고객세분화 revision 
 https://www.youtube.com/watch?v=cgV_BFavkxU
+
