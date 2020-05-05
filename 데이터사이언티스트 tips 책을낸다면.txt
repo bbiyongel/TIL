@@ -38,6 +38,13 @@ LGBM shap value : 요인
 
 최적화 : 유통, 차량배치, 거점 최적화 
 
+추천 : cfilter 
+
+text/image processing
+
+Fraud detection , outlier, abnormaly detection
+
+
 <기타 알고리즘 >
 GPS 처리 : 집/직장 처리, gps load 매칭, 주소, poi 
 => 여러가지를 뽑아낼수 있다. 
