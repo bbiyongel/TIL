@@ -232,7 +232,7 @@ mydate.replace(tzinfo=kst) # 이건 잘안됨. 아래처럼 localize로 변경�
 mydate_kst = kst.localize(mydate)
 
 
-
+##
 
 
 
