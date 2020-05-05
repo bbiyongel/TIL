@@ -1,0 +1,62 @@
+
+데이터사이언티스트 tips 
+
+신입 DS들이 알고있어야할 지식 
+사회 초년생 
+
+
+< 빅데이터플랫폼 >
+
+- hive
+- impala 
+- hue 
+- workflow 
+- shell 
+
+
+kernel
+
+scala
+
+hive to table 
+
+
+
+< 실무분석모델 >
+- 오토모티브 인더스트리 
+
+클러스터링 알고리즘을 활용한 고객세그멘테이션
+ - kmeans , dbscan, elbow, silhouette 
+
+시계열 예측모델 : 판매예측 
+
+고장예측모델 
+
+연관분석 - 잘안씀 
+
+LGBM shap value : 요인 
+
+최적화 : 유통, 차량배치, 거점 최적화 
+
+<기타 알고리즘 >
+GPS 처리 : 집/직장 처리, gps load 매칭, 주소, poi 
+=> 여러가지를 뽑아낼수 있다. 
+
+<그외 노하우>
+key message 뽑아내는 방법 
+보고서 : insight 1~2줄, 그래프 1~2개, 
+  
+tools : tableau, spotfire, cliqsense
+sas, rapid miner , R 
+
+
+
+
+< 모델 해석 > 
+
+
+tips
+대용량 
+pyspark
+
+
