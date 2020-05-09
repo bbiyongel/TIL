@@ -13,7 +13,7 @@ plt.title('The Elbow Method showing the optimal k')
 plt.show()
 
 
-###########################
+##############################
 df = pd.DataFrame(Z)
 df['category'] = km.labels_
 colormap = { 0: 'red', 1: 'green', 2: 'blue'}
