@@ -2,7 +2,20 @@
 
 https://teddylee777.github.io/pandas/10minutes-to-pandas-%EB%B6%80%EB%8F%99%EC%82%B0%EC%8B%A4%EC%A0%9C%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0
 
+https://jsideas.net/daily_to_weekly/
 
+https://blog.naver.com/PostView.nhn?blogId=okkam76&logNo=221372134987&parentCategoryNo=&categoryNo=27&viewDate=&isShowPopularPosts=false&from=postList
+
+https://stackoverrun.com/ko/q/9675748
+
+https://wikidocs.net/46755
+
+https://3months.tistory.com/296
+
+
+cols = df.columns
+cols_fnl = cols.drop(['area','city'])
+df2.columns=['area','city','pdate','cnt']
 
 
 pandas profiling
