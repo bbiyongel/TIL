@@ -166,10 +166,186 @@ plt.show()
 
 
 
-	
+! pip install python-pptx
+
+# 필요한 라이브러리 불러오기
+from pptx import Presentation
+from pptx.enum.text import PP_ALIGN   # 정렬 설정하기
+from pptx.util import Pt      # Pt 폰트사이즈
+
+# pptx 파일 열기
+pptx_fpath = './명패포맷.pptx'
+prs = Presentation(pptx_fpath)
+
+# 슬라이드 지정하기
+slide_num = 0
+slide = prs.slides[slide_num]
+
+# 슬라이드 내 shape 사전 만들기
+shapes_list = slide.shapes
+shape_index = {}
+for i, shape in enumerate(shapes_list):
+    shape_index[ shape.name ] = i
+print(shape_index)   # {'Box_down': 0, 'Box_up': 1, 'name2': 2, 'name1': 3}
+
+def text_on_shape(shape, input_text, font_size = 95, font_color = 'black', bold = True):
+
+    # shape 내 텍스트 프레임 선택하기 & 기존 값 삭제하기
+    text_frame = shape.text_frame
+    text_frame.clear()
+
+    # 문단 선택하기 
+    p = text_frame.paragraphs[0]
+
+    # 정렬 설정: 중간정렬
+    p.alighnment = PP_ALIGN.CENTER  
+
+    # 텍스트 입력 / 폰트 설정
+    run = p.add_run()   
+    run.text = input_text
+    font = run.font
+    font.size = Pt(font_size)
+    font.bold = bold 
+    font.name = None
+
+# 하나의 shape 선택하기
+shape_name = 'name1'
+shape_select = shapes_list[ shape_index[ shape_name ]]    
+
+text_on_shape(shape_select, '홍길동')
+
+
+save_file = './홍길동.pptx'
+prs.save(save_file)
+
+
+
+
+
+만약 abcdef.py 파일 내에,   함수 f1, f2 가 있다면
+
+아래와 같은 import 문으로 이 함수들을 다시 사용할 수 있어요. 
+
+​
+
+from abcdef import f1  # f1 함수만 사용할때
+from abcdef import f1, f2    # f1 함수, f2 함수를 사용할때
+from abcdef import *   # abcdef.py 파일내 있는 모든 함수/변수를 불러올때
+
+
+
+
+# 라이브러리 설치
+! pip install pytube3
+
+from pytube import YouTube
+video_url = 'https://www.youtube.com/watch?v=Zg3j6anDU6U'
+yt = YouTube(video_url)
+
+print("[영상 제목]", yt.title)  # 영상제목
+print("[영상 게시자]", yt.author) # 영상 게시자
+print("[조회수]", yt.views)
+print("[평균평점]", yt.rating) # 평균 평점
+print("[영상길이(초)]", yt.length)
+print("[연령제한여부]", yt.age_restricted)
+print("[영상 설명]", yt.description) # 영상 설명
+print("[썸네일URL]", yt.thumbnail_url) # 썸네일 url 주소
+
+
+yt.streams.all()
+
+# 전송 포맷 중 첫번째 선택
+stream = yt.streams.all()[0]
+stream   # <Stream: itag="18" mime_type="video/mp4" res="360p" fps="30fps" vcodec="avc1.42001E" acodec="mp4a.40.2" progressive="True" type="video">
+
+# 내가 원하는 영상만 선택하기
+# 음성만 선택시
+yt.streams.filter(only_audio = True).all()
+# 내가 원하는 영상만 선택하기
+# mp4만
+yt.streams.filter(file_extension = 'mp4').all( )
+
+
+stream = yt.streams.filter(file_extension = 'mp4').all( )[0]
+stream   # <Stream: itag="18" mime_type="video/mp4" res="360p" fps="30fps" vcodec="avc1.42001E" acodec="mp4a.40.2" progressive="True" type="video">
+
+
+# 영상 다운로드
+stream.download()
+
+# 파일 이름 지정 
+## 폴더지정 가능
+stream.download(output_path='test', filename = 'KOBE', filename_prefix= 'R.I.P_')
+
+yt.captions.all()
+caption = yt.captions.get_by_language_code('ko')
+
+# 언어로 자막 선택하기
+## 한글 자막 1순위로 선택하기. 만약 한글 자막이 없다면 자막 리스트 중 첫 번째 자막 선택하기
+caption = yt.captions.get_by_language_code('ko')
+if caption == None:
+    caption = yt.captions.all()[0]
+
+# 자막 살펴보기(xml 포맷)
+caption.xml_captions
+
+# 자막 살펴보기(srt 포맷)
+print(caption.generate_srt_captions())
+
+# 자막 다운받기: download("파일명")
+caption.download( yt.title )
+
+
+
+
+
+sns.scatterplot(x = 'total_bill', y = 'tip', data = raw, hue = 'sex')
+sns.lineplot(x = 'total_bill', y = 'tip', data = raw, hue = 'sex') 
+
+sns.lmplot(x = 'total_bill', y = 'tip', data = raw, hue = 'sex', col='day')
+sns.lmplot(x = 'total_bill', y = 'tip', data = raw, hue = 'sex', col='day', col_wrap= 2)
+
+
+
+import pandas as pd
+import pandas_profiling
+
+# 레포트 생성 --> html 파일로 저장하기  
+## 한글이 깨지시는 분은 제일 아래 코드로 실행해주세요
+raw = pd.read_excel('파일명.xlsx')
+report = raw.profile_report()
+report.to_file('report.html')
+
+
+
+import pandas as pd
+import pandas_profiling
+
+############ 한글 폰트 지정하는 부분 #################
+import matplotlib
+from matplotlib import font_manager, rc
+import platform
+
+if platform.system() == 'Windows':
+# 윈도우인 경우
+    font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/malgun.ttf").get_name()
+    rc('font', family=font_name)
+else:    
+# Mac 인 경우
+    rc('font', family='AppleGothic')
+    
+matplotlib.rcParams['axes.unicode_minus'] = False   
+#그래프에서 마이너스 기호가 표시되도록 하는 설정입니다.
+
+
+# 레포트 생성 --> html 파일로 저장하기  
+## 한글이 깨지시는 분은 제일 아래 코드로 실행해주세요
+raw = pd.read_excel('파일명.xlsx')
+report = raw.profile_report()
+report.to_file('report.html')	
 			  
 			  
-			  
+pip install pandas_profiling
 			  
 
 pandas profiling
@@ -181,6 +357,57 @@ import pandas-profiling as pp
 df.profile_report()
 
 
+
+# 토픽 정리하기
+TOPIC_change = {    '조작성' : '사용성',    '수납/공간':'사용성',    '용량' : '사용성',    '냄새' : '사용성',
+    '관리' : '사용성',    '활용도' : '사용성',    '휴대성' : '사용성',    '관리' : '사용성',    '색상' : '디자인',
+    '기능' : '성능',    '세척' : '관리',       '제품구성' : '가격'}
+raw['topic_modi'] = raw['topic'].apply(lambda x: TOPIC_change[x] if x in TOPIC_change.keys() else x)
+
+topic_pivot = pd.pivot_table(data = raw, index = 'brand', columns = 'topic_modi',values = 'product_id', aggfunc='count',fill_value=0)
+topic_sorting = raw.pivot_table(index = 'topic_modi', values = 'score', aggfunc='count').sort_values(by = 'score', ascending = False).index
+topic_pivot[topic_sorting]
+
+
+score_df = pd.pivot_table(data = raw, index = 'brand', columns = 'topic',values = 'score', aggfunc='mean',fill_value=0, )
+score_df = score_df[topic_sorting]
+score_df.style.format("{:.3}")
+
+import plotly.graph_objects as go
+
+categories = score_df.columns[1:]
+fig = go.Figure()
+
+for i in range(len(score_df)):
+    fig.add_trace(go.Scatterpolar(
+          r=score_df.iloc[i,1:],
+          theta=categories,
+          fill='toself',
+          name=score_df.index[i],
+        opacity = 0.7     
+    ))
+    
+fig.update_layout(
+  polar=dict(
+    radialaxis=dict(
+      visible=True,
+      range=[4.4, 5]
+    )),
+  showlegend=True
+)
+
+
+
+pip install jupyter_contrib_nbextensions      # 라이브러리 설치
+jupyter contrib nbextension install --user    # 쥬피터노트북에서 보일 수 있도록 등록
+
+
+
+http://localhost:8888/nbextensions  
+
+
+# 데이터 값 실수. 소수점 두째자리까지 표시
+pd.options.display.float_format = '{:.2f}'.format
 
 
 
