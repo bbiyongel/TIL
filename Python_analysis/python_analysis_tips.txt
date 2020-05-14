@@ -12,11 +12,165 @@ https://wikidocs.net/46755
 
 https://3months.tistory.com/296
 
+https://sikaleo.tistory.com/40
+
+https://data-make.tistory.com/139
+
 
 cols = df.columns
 cols_fnl = cols.drop(['area','city'])
 df2.columns=['area','city','pdate','cnt']
 
+
+
+data.corr()
+%matplotlib inline   #쥬피터노트북에서 이미지 표시가능하게 하는 쥬피터노트북 매직함수
+import matplotlib.pyplot as plt 
+import seaborn as sns  
+plt.figure(figsize=(15,15))
+sns.heatmap(data = data.corr(), annot=True, 
+fmt = '.2f', linewidths=.5, cmap='Blues')
+
+df = raw.corr()
+
+sns.clustermap(df, 
+               annot = True,      # 실제 값 화면에 나타내기
+               cmap = 'RdYlBu_r',  # Red, Yellow, Blue 색상으로 표시
+               vmin = -1, vmax = 1, #컬러차트 -1 ~ 1 범위로 표시
+              )
+
+			  
+# 삼각형
+df = raw.corr()
+# 그림 사이즈 지정
+fig, ax = plt.subplots( figsize=(7,7) )
+
+# 삼각형 마스크를 만든다(위 쪽 삼각형에 True, 아래 삼각형에 False)
+mask = np.zeros_like(df, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+# 히트맵을 그린다
+sns.heatmap(df, 
+            cmap = 'RdYlBu_r', 
+            annot = True,   # 실제 값을 표시한다
+            mask=mask,      # 표시하지 않을 마스크 부분을 지정한다
+            linewidths=.5,  # 경계면 실선으로 구분하기
+            cbar_kws={"shrink": .5},# 컬러바 크기 절반으로 줄이기
+            vmin = -1,vmax = 1   # 컬러바 범위 -1 ~ 1
+           )  
+plt.show()
+
+
+data = df.pivot_table(index = 'size', columns = 'day', values = 'tip', aggfunc = 'sum' )
+data.head()
+sns.heatmap(data)   # 기본 생성
+
+
+# 값 표시할때
+
+sns.heatmap(data, 
+           annot = True, fmt = '.0f')
+
+# 글자 폰드 조정하기(글자 크게 보이기)
+sns.heatmap(data, 
+            annot = True, fmt = '.0f', 
+            annot_kws = {'size' : 20})
+
+# 글자 폰트 작게
+sns.heatmap(data, 
+            annot = True, fmt = '.0f', 
+            annot_kws = {'size' : 7})
+
+
+fmt1 = '%d x %d = %d'%(a,b,a*b)
+print(fmt1)   #  5 x 8 = 40
+fmt2 = '{} x {} = {}'.format(a,b,a*b)
+
+			  
+fmt4 = f'{a} x {b} = {a*b}'
+
+
+import seaborn as sns
+
+# 데이터 준비하기 (하고 싶은 데이터프레임으로 변경 가능)
+tips = sns.load_dataset("tips")
+
+# plot swarmplot
+sns.swarmplot(data=tips, x="day", y="total_bill")
+# plot boxplot
+sns.boxplot(data=tips, x="day", y="total_bill",  
+            showcaps=False,             # 박스 상단 가로라인 보이지 않기
+            whiskerprops={'linewidth':0}, # 박스 상단 세로 라인 보이지 않기 
+            showfliers=False,           # 박스 범위 벗어난 아웃라이어 표시하지 않기
+            boxprops={'facecolor':'None'}, # 박스 색상 지우기
+        )			  
+
+
+https://m.blog.naver.com/PostView.nhn?blogId=kiddwannabe&logNo=221205309816&proxyReferer=https:%2F%2Fwww.google.com%2F
+
+
+# 마커 추가하기
+folium.Marker([37.5536067,126.9674308],    # 서울역위치
+              tooltip="서울역(마우스올리면보여짐)",
+              popup="서울역(클릭하면 보여짐)",
+              ).add_to(m)
+
+
+
+from folium.plugins import MiniMap
+
+# 지도 생성하기
+m = folium.Map(location=[37.5536067,126.9674308],   # 기준좌표: 서울역
+               zoom_start=12)
+
+# 미니맵 추가하기
+minimap = MiniMap() 
+m.add_child(minimap)
+
+# 마커 추가하기
+folium.Marker([37.5536067,126.9674308],    # 서울역위치
+              tooltip="서울역(마우스올리면보여짐)",
+              popup="서울역(클릭하면 보여짐)",
+              ).add_to(m)
+m		
+
+
+
+from tqdm.notebook import tqdm
+
+for i in tqdm(range(10)):
+    print(i)
+    time.sleep(0.5)
+
+
+! pip  install matplotlib=3.0.3
+# 버전 지정해서 설치하기
+! pip install matplotlib=3.1.2
+
+# 최신 버전으로 업그레이드하기
+! pip install matplotlib --upgrade
+
+
+# 그림 사이즈 지정
+fig, ax = plt.subplots( figsize=(10,60) )
+# 히트맵 그리기
+sns.heatmap(data = data)
+
+# 축 조정
+b, t = plt.ylim() # discover the values for bottom and top
+b += 0.5 # Add 0.5 to the bottom
+t -= 0.5 # Subtract 0.5 from the top
+plt.ylim(b, t) # update the ylim(bottom, top) values
+
+plt.show() 
+
+
+
+	
+			  
+			  
+			  
+			  
 
 pandas profiling
 
