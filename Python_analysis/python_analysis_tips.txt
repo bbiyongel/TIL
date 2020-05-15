@@ -412,6 +412,122 @@ pd.options.display.float_format = '{:.2f}'.format
 
 
 
+
+# real = 실제 값,   prediction = 예측한 값
+from sklearn.metrics import confusion_matrix
+confusion_matrix(real, prediction)  #confusion matrix 표시
+
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+precision_score(real, prediction)  #precision(정밀도)
+recall_score(real, prediction)     #sensitivity(민감도), recall(재현율)
+f1_score(real, prediction)         # F1 score(정밀도, 민감도 조화평균)
+
+
+① 뺨을 때렸는데(P) 모기가 있었다면  TP  (Positive 가 True 다)  ▶ 아싸~! 쾌감!
+② 뺨을 때렸는데(P) 모기가 없었다면 ㅠ  FP(Positive 가 False 다) ▶ 아프기만 하고.. ㅠ
+③ 뺨을 안때렸는데(N) 모기가 있었따면? ㅠ FN(Negative 가 False) ▶ 간지럽고.. 짜증나고. ㅠ
+④ 뺨을 안때렸는데(N) 모기가 없었다면   TN(Negative 가 True)  ▶ 숙면 ㅎ
+
+Precision_score(정밀도)는, 
+내가 모기가 있다고 예상하고 손을 휘둘렀을때,  실제로 모기가 있어서 잡은 비율을 말합니다.
+
+Precision_score =     TP / P      =        TP / (FP + TP)
+
+이 비율이 높을 수록,  짜증은 감소하고 환희는 증가하겠죠
+원샷~원킬~!!
+
+
+2. Recall_score(재현율)
+
+두 번째는 Recall_score 혹은 Sensitivity 라고 부르는 방식입니다. 
+실제로 모기가 있을때(True), 잘 잡느냐(P) 를 평가하는 방법이죠. 
+
+
+recall_score = TP  / ( True)  = TP / (FN + TP)
+
+이 지표가 높을 수록 모기에 물릴 확률이 적어지겠죠. 
+
+
+이렇게 예측모델의 정확도를 측정하는 방법은 하나가 아닙니다. 
+모기에 물리지 않게 하는것이 중요한지(recall), 
+원샷원킬로  휘두를때 잡을 확률이 높은 것이 중요한지(precision) 는 답이 없습니다. 
+
+분류 예측하는 상품/서비스의 특성에 따라 많이 달라지겠죠. 
+※ 정밀도와 재현율 두 가지 지표를 비교하기 쉽게 하나의 지표로 전환하여 사용하기도 합니다. 
+ ex) 정밀도와 재현율의 조화평균으로 계산한 F1 이 있습니다
+
+ 
+ 
+word_coocs = [
+    ('부동산','가격',20),
+    ('부동산','아파트',10),
+    ('아파트','가격', 9),
+    ('아파트','강남', 7),
+    ('아파트','분양',5),
+    ('부동산','토지',5),
+    ('아파트','전세', 3),
+    ('부동산','대출', 2),
+    ('신혼부부','대출',2),
+    ('강남','전세',1)
+]
+
+# 그래프 그리기 준비
+import networkx as nx
+import matplotlib.pyplot as plt
+import sys
+
+
+def sna_graph(word_coocs, NETWORK_MAX):
+    
+    G = nx.Graph()
+    i = 0
+    
+    # edge 를 생성한다
+    for word1, word2, count in word_coocs:
+        i +=1
+        if i > NETWORK_MAX: break
+        
+        G.add_edge(word1, word2, weight=count)
+    
+    # MST 모델을 만든다. 
+    T = nx.minimum_spanning_tree(G)
+    nodes = nx.nodes(T)
+    degrees = nx.degree(T)
+    
+    # node 사이즈를 정해준다
+    node_size = []
+    for node in nodes:
+        ns = degrees[node]*100
+        node_size.append(ns)
+
+    # 폰트 정리
+    if sys.platform in ["win32", "win64"]:
+        font_name = "malgun gothic"
+    elif sys.platform == "darwin":
+        font_name = "AppleGothic"
+        
+    # 분석결과를 화면에 표시한다
+    plt.figure(figsize=(16,12))    
+    nx.draw_networkx(T,
+           pos=nx.fruchterman_reingold_layout(G, k=0.5),
+           node_size=node_size,
+           node_color="yellow",
+           font_family=font_name,
+           label_pos=1, #0=head, 0.5=center, 1=tail
+            with_labels=True,
+            font_size=12 )
+
+    plt.axis("off")
+    plt.show()
+
+	
+
+
+
+
+
+
 xgboost 소개 : 오늘코드 
 
 전체 보기 : http://bit.ly/inflearn_nlp_tutorial
