@@ -521,6 +521,878 @@ def sna_graph(word_coocs, NETWORK_MAX):
     plt.axis("off")
     plt.show()
 
+
+
+import tarfile
+
+fname = './압축파일이름.확장자'  # 압축 파일을 지정해주고   
+ap = tarfile.open(fname)      # 열어줍니다. 
+
+ap.extractall(압축풀경로)         # 그리고는 압축을 풀어줍니다. 
+# () 안에는 풀고 싶은 경로를 넣어주면 되요. 비워둘 경우 현재 경로에 압축 풉니다. 
+ 
+ap.close()                  # 압축파일은 이제 닫아줍니다. 
+
+
+
+
+import pandas as pd
+
+data = pd.DataFrame(source)
+
+#중복된 행인지 점검하기(동일한 데이터가 있는지)
+display(data.duplicated())
+
+#중복된 행의 데이터만 표시하기
+display(data[data.duplicated()])
+
+#중복된 행은 하나만 남기고 제거하기
+data.drop_duplicates(inplace = True)
+
+
+
+
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
+
+# 지메일 아이디,비번 입력하기
+email_user = '<ID>@gmail.com'      #<ID> 본인 계정 아이디 입력
+email_password = '<PASSWORD>'      #<PASSWORD> 본인 계정 암호 입력
+email_send = '<받는곳주소>'         # <받는곳주소> 수신자 이메일 abc@abc.com 형태로 입력
+
+# 제목 입력
+subject = '안녕하세요. 데이터공방입니다 ' 
+
+msg = MIMEMultipart()
+msg['From'] = email_user
+msg['To'] = email_send
+msg['Subject'] = subject
+
+# 본문 내용 입력
+body = '데이터공방입니다. bog.naver.com/kiddwannabe'
+msg.attach(MIMEText(body,'plain'))
+
+############### ↓ 첨부파일이 없다면 삭제 가능  ↓ ########################
+# 첨부파일 경로/이름 지정하기
+filename='첨부파일.csv'  
+attachment  =open(filename,'rb')
+
+part = MIMEBase('application','octet-stream')
+part.set_payload((attachment).read())
+encoders.encode_base64(part)
+part.add_header('Content-Disposition',"attachment; filename= "+filename)
+msg.attach(part)
+############### ↑ 첨부파일이 없다면 삭제 가능  ↑ ########################
+
+text = msg.as_string()
+server = smtplib.SMTP('smtp.gmail.com',587)
+server.starttls()
+server.login(email_user,email_password)
+
+server.sendmail(email_user,email_send,text)
+server.quit()
+
+
+
+
+
+# \xa0, \xa9 를 없애줌
+data = data.applymap(lambda x: x.replace('\xa0','').replace('\xa9',''))  
+
+# encoding: cp949 로 전환--> 엑셀에서 깨지지 않게
+data.to_csv(fname, encoding='cp949')     
+
+
+
+(버거킹+맥도날드+KFC)÷롯데리아 = 한 도시 발전 수준.
+
+한 도시의 발전 수준은 (버거킹의 갯수+맥도날드의 갯수+KFC의 갯수)/롯데리아의 갯수를 계산하여 높게 나올수록 더 발전된 도시라고 할 수 있다
+
+https://nbviewer.jupyter.org/gist/hyeshik/cf9f3d7686e07eedbfda?revision=6
+https://twitter.com/godtsune_miku/status/513648274406789120
+
+
+import urllib.request
+import json
+import pandas as pd
+import bs4
+
+response = urllib.request.urlopen('http://www.burgerking.co.kr/api/store/searchmap/empty/?areacd=')
+bgk_data = json.loads(response.read().decode('utf-8'))
+bgk_tbl = pd.DataFrame(bgk_data)
+bgk_tbl.head()
+
+bgk_locs = pd.DataFrame(bgk_tbl['NewAddr'].apply(lambda v: v.split()[:2]).tolist(),
+                        columns=('d1', 'd2'))
+bgk_locs.head()
+
+bgk_locs['d1'].unique()
+
+d1_aliases = """서울시:서울특별시 충남:충청남도 강원:강원도 경기:경기도 충북:충청북도 경남:경상남도 경북:경상북도
+전남:전라남도 전북:전라북도 제주도:제주특별자치도 제주:제주특별자치도 대전시:대전광역시 대구시:대구광역시 인천시:인천광역시
+광주시:광주광역시 울산시:울산광역시"""
+d1_aliases = dict(aliasset.split(':') for aliasset in d1_aliases.split())
+bgk_locs['d1'] = bgk_locs['d1'].apply(lambda v: d1_aliases.get(v, v))
+
+
+bgk_locs['d1'].unique()
+
+bgk_locs[bgk_locs['d1'] == '수원시']
+
+bgk_locs.iloc[101] = ['경기도', '수원시']
+
+bgk_locs['d2'].unique()
+
+B = bgk_locs.apply(lambda r: r['d1'] + ' ' + r['d2'], axis=1).value_counts()
+B.head()
+
+MCDONALDS_URL = 'http://www.mcdonalds.co.kr/www/kor/findus/district.do?sSearch_yn=Y&skey=2&pageIndex={page}&skeyword={location}'
+
+def search_mcdonalds_stores_one_page(location, page):
+    response = urllib.request.urlopen(
+        MCDONALDS_URL.format(location=urllib.parse.quote(location.encode('utf-8')), page=page))
+    mcd_data = response.read().decode('utf-8')
+    soup = bs4.BeautifulSoup(mcd_data)
+    
+    ret = []
+    for storetag in soup.findAll('dl', attrs={'class': 'clearFix'}):
+        storename = storetag.findAll('a')[0].contents[-1].strip()
+        storeaddr = storetag.findAll('dd', attrs={'class': 'road'})[0].contents[0].split(']')[1]
+        storeaddr_district = storeaddr.split()[:2]
+        ret.append([storename] + storeaddr_district)
+
+    return pd.DataFrame(ret, columns=('store', 'd1', 'd2')) if ret else None
+
+# 여러 페이지를 쭉 찾아서 안 나올 때 까지 합친다.
+def search_mcdonalds_stores(location):
+    from itertools import count
+    
+    found = []
+    for pg in count():
+        foundinpage = search_mcdonalds_stores_one_page(location, pg+1)
+        if foundinpage is None:
+            break
+        found.append(foundinpage)
+
+    return pd.concat(found)
+	
+search_mcdonalds_stores('전라북도').head()
+
+
+found = []
+for distr in bgk_locs['d1'].unique():
+    found.append(search_mcdonalds_stores(distr))
+mcd_tbl = pd.concat(found)
+mcd_tbl['store'].value_counts().head()
+
+mcd_tbl = mcd_tbl.drop_duplicates(subset=['store'])
+M = mcd_tbl.apply(lambda r: r['d1'] + ' ' + r['d2'], axis=1).value_counts()
+M.head()
+
+kfc_dists = "강원 경기 경남 경북 광주 대구 대전 부산 서울 울산 인천 전남 전북 제주 충남 충북".split()
+KFC_DISTSEARCH_URL = 'http://www.kfckorea.com/store/store_addr_search.asp?addr_div=gugun&sido={location}'
+
+def kfc_search_subdists(location):
+    response = urllib.request.urlopen(
+        KFC_DISTSEARCH_URL.format(location=urllib.parse.quote(location.encode('utf-8'))))
+    kfc_data = response.read().decode('utf-8')
+    soup = bs4.BeautifulSoup(kfc_data)
+    return list(filter(None, [tag.attrs['value'] for tag in soup.findAll('option')]))
+kfc_alldist = [(d, subd) for d in kfc_dists for subd in kfc_search_subdists(d)]
+kfc_alldist[:5], len(kfc_alldist)
+
+KFC_STORESEARCH_URL = ('http://www.kfckorea.com/store/store_search.asp?sales_24_yn_=&'
+                       'sales_wifi_yn_=&sales_order_group_yn_=&sales_park_yn_=&sales_subway_yn_=&'
+                       'sales_mart_in_yn_=&searchFlag=0&addr_div1={div1}&addr_div2={div2}&keyword=')
+
+def kfc_search_stores_in_dist(d1, d2):
+    response = urllib.request.urlopen(
+        KFC_STORESEARCH_URL.format(div1=urllib.parse.quote(d1.encode('utf-8')),
+                                   div2=urllib.parse.quote(d2.encode('utf-8'))))
+    return json.loads(response.read().decode('utf-8'))['store']
+found = []
+for d1, d2 in kfc_alldist:
+    found.extend(kfc_search_stores_in_dist(d1, d2))
+kfc_tbl = pd.DataFrame(found)
+kfc_tbl.head()
+
+
+kfc_locs = pd.DataFrame(kfc_tbl['old_addr1'].apply(
+    lambda v: v.replace('&nbsp;', ' ').replace('&#160;', ' ').replace('광주 광역', '광주광역').split()[:2]).tolist(),
+              columns=('d1', 'd2'))
+kfc_locs['d1'].unique()
+
+d1_aliases = """서울시:서울특별시 충남:충청남도 강원:강원도 경기:경기도 충북:충청북도 경남:경상남도 경북:경상북도
+전남:전라남도 전북:전라북도 제주도:제주특별자치도 제주:제주특별자치도 대전시:대전광역시 대구시:대구광역시 인천시:인천광역시
+광주시:광주광역시 울산시:울산광역시 광주:광주광역시 대구:대구광역시 대전:대전광역시 부산:부산광역시 부산시:부산광역시
+인천:인천광역시 서울:서울특별시 울산:울산광역시"""
+d1_aliases = dict(aliasset.split(':') for aliasset in d1_aliases.split())
+kfc_locs['d1'] = kfc_locs['d1'].apply(lambda v: d1_aliases.get(v, v))
+kfc_locs['d1'].unique()
+
+kfc_locs['d2'].unique()
+
+K = kfc_locs.apply(lambda r: r['d1'] + ' ' + r['d2'], axis=1).value_counts()
+K.head()
+
+BMK = pd.DataFrame({'B': B, 'M': M, 'K': K}).fillna(0)
+BMK['total'] = BMK.sum(axis=1)
+BMK = BMK.sort('total', ascending=False)
+BMK.head(10)
+
+
+from matplotlib import pyplot as plt
+from matplotlib import rcParams, style
+style.use('ggplot')
+rcParams['font.size'] = 12
+
+plt.figure(figsize=(4, 3))
+BMK.sum(axis=0).iloc[:3].plot(kind='bar')
+
+import scipy.stats
+fig = plt.figure(figsize=(9, 3))
+
+def plot_nstores(b1, b2, label1, label2):
+    plt.scatter(BMK[b1] + np.random.random(len(BMK)),
+                BMK[b2] + np.random.random(len(BMK)),
+                edgecolor='none', alpha=0.75, s=6, c='black')
+    plt.xlim(-1, 15)
+    plt.ylim(-1, 15)
+    plt.xlabel(label1)
+    plt.ylabel(label2)
+    
+    r = scipy.stats.pearsonr(BMK[b1], BMK[b2])
+    plt.annotate('r={:.3f}'.format(r[0]), (10, 12.5))
+
+ax = fig.add_subplot(1, 3, 1)
+plot_nstores('B', 'M', 'Burger King', "McDonald's")
+
+ax = fig.add_subplot(1, 3, 2)
+plot_nstores('B', 'K', 'Burger King', 'KFC')
+
+ax = fig.add_subplot(1, 3, 3)
+plot_nstores('M', 'K', "McDonald's", 'KFC')
+
+plt.tight_layout()
+
+
+plt.figure(figsize=(4, 3))
+for col, label in [('B', 'Burger King'), ('K', 'KFC'), ('M', "McDonald's")]:
+    cumulv = np.cumsum(sorted(BMK[col], reverse=True)) / BMK[col].sum()
+    plt.plot(cumulv, label='{} ({})'.format(label, int(BMK[col].sum())))
+plt.legend(loc='best')
+plt.xlabel('Number of districts (si/gun/gu)')
+plt.ylabel('Cumulative fraction')
+
+
+
+LOTTERIA_URL = 'http://www.lotteria.com/Shop/Shop_Ajax.asp'
+LOTTERIA_VALUES = {
+    'Page': 1, 'PageSize': 2000, 'BlockSize': 2000,
+    'SearchArea1': '', 'SearchArea2': '', 'SearchType': "TEXT",
+    'SearchText': '', 'SearchIs24H': '', 'SearchIsWifi': '',
+    'SearchIsDT': '', 'SearchIsHomeService': '', 'SearchIsGroupOrder': '',
+    'SearchIsEvent': ''}
+LOTTERIA_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:12.0) Gecko/20100101',
+    'Host': 'www.lotteria.com',
+    'Accept': 'text/html, */*; q=0.01',
+    'Accept-Language': 'en-us,en;q=0.5',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Referer': 'http://www.lotteria.com/Shop/Shop_List.asp?Page=1&PageSize=2000&BlockSize=2000&Se'
+               'archArea1=&SearchArea2=&SearchType=TEXT&SearchText=&SearchIs24H=&SearchIsWifi=&Se'
+               'archIsDT=&SearchIsHomeService=&SearchIsGroupOrder=&SearchIsEvent=',
+}
+postdata = urllib.parse.urlencode(LOTTERIA_VALUES).encode('utf-8')
+req = urllib.request.Request(LOTTERIA_URL, postdata, LOTTERIA_HEADERS)
+response = urllib.request.urlopen(req)
+ltr_data = response.read().decode('utf-8')
+soup = bs4.BeautifulSoup(ltr_data)
+found = []
+for tag in soup.findAll('tr', {'class': 'shopSearch'}):
+    subtag = [tag.findAll('td', {'style': 'padding-right:10px;'}
+                          )[i].contents[0].contents[0]
+              for i in (0, 1)]
+    found.append([subtag[0]] + subtag[1].replace('광주 광역', '광주광역').split()[:2])
+ltr_tbl = pd.DataFrame(found, columns=('storename', 'd1', 'd2'))
+ltr_tbl.head()
+
+
+ltr_tbl['d1'].unique()
+
+d1_aliases = """강원:강원도 충북:충청북도 부산:부산광역시 경기:경기도 전남:전라남도 경북:경상북도
+대구:대구광역시 서울:서울특별시 세종:세종특별자치시 경남:경상남도 충남:충청남도 대전:대전광역시
+울산:울산광역시 제주:제주특별자치도 인천:인천광역시 전북:전라북도 광주:광주광역시 대전시:대전광역시
+충남시:충청남도 청북:충청북도"""
+d1_aliases = dict(aliasset.split(':') for aliasset in d1_aliases.split())
+ltr_tbl['d1'] = ltr_tbl['d1'].apply(lambda v: d1_aliases.get(v, v))
+ltr_tbl['d1'].unique()
+
+ltr_tbl['d2'].unique()
+
+
+d2_aliases = """나주시금천면:나주시 장성군장성읍:장성군 고흥군고흥읍:고흥군 기장군정관면:기장군
+창녕군남지읍:창녕군 임실군임실읍:임실군 원주시지정면:원주시 진구:부산진구 논산시연무읍:논산시"""
+d2_aliases = dict(aliasset.split(':') for aliasset in d2_aliases.split())
+ltr_tbl['d2'] = ltr_tbl['d2'].apply(lambda v: d2_aliases.get(v, v))
+ltr_tbl['d2'].unique()
+
+ltr_tbl[ltr_tbl['d2'].apply(lambda v: v[-1] not in '시군구')]
+
+
+d2_aliases = """연기면:세종시 금남면:세종시 조치원읍:세종시 아산신:아산시 구로:구로구
+종로2가:종로구"""
+d2_aliases = dict(aliasset.split(':') for aliasset in d2_aliases.split())
+ltr_tbl['d2'] = ltr_tbl['d2'].apply(lambda v: d2_aliases.get(v, v))
+ltr_tbl['d2'].unique()
+
+L = ltr_tbl.apply(lambda r: r['d1'] + ' ' + r['d2'], axis=1).value_counts()
+L.head()
+distr_latlon = pd.read_table('../../../../p/tiny/2014-12/burgerindex/latlon/lonlat.csv')
+distr_latlon.head()
+
+
+distr_latlon.index = distr_latlon.apply(lambda r: r['d1'] + ' ' + r['d2'], axis=1)
+bgt = pd.DataFrame({'B': B, 'M': M, 'K': K, 'L': L}).fillna(0)
+bgt = pd.merge(distr_latlon, bgt, how='outer', left_index=True, right_index=True)
+bgt.head()
+
+bgt[np.isnan(bgt['area'])]
+
+
+bgidx_cols = ['B', 'K', 'L', 'M']
+bgt.loc['경기도 여주시', bgidx_cols] += bgt.loc['경기도 여주군', bgidx_cols]
+bgt.loc['울산광역시 울주군', bgidx_cols] += bgt.loc['울산광역시 을주군', bgidx_cols]
+bgt.loc['충청남도 천안시', bgidx_cols] += bgt.loc['충청북도 천안시', bgidx_cols]
+bgt.loc['충청북도 청주시', bgidx_cols] += bgt.loc['충청북도 청원군', bgidx_cols] # 2014년 7월 1일 통합.
+bgt = bgt[~np.isnan(bgt['area'])].fillna(0)
+bgt.head()
+
+
+bgt[(bgt['L'] == 0) & (bgt['B'] + bgt['M'] + bgt['K'] > 0)]
+bgt[bgt['L'] == 0]
+
+bgt['BMK'] = bgt['B'] + bgt['M'] + bgt['K']
+bgt['BgIdx'] = bgt['BMK'] / bgt['L']
+bgt = bgt.sort('BgIdx', ascending=False)
+bgt.head(10)
+
+
+rcParams['font.family'] = 'NanumGothic'
+
+plt.figure(figsize=(5, 5))
+r = lambda: np.random.random(len(bgt))
+plt.scatter(bgt['L'] + r(), bgt['BMK'] + r(), s=6, c='black', edgecolor='none', alpha=0.6)
+plt.xlabel('롯데리아')
+plt.ylabel('버거킹+맥도날드+KFC')
+plt.xlim(0, 45)
+plt.ylim(0, 45)
+plt.gca().set_aspect(1)
+
+# 추세선 그린다.
+trendfun = np.poly1d(np.polyfit(bgt['L'], bgt['BMK'], 1))
+trendx = np.linspace(0, 45, 2)
+plt.plot(trendx, trendfun(trendx))
+
+# 튀는 점 몇 개는 이름도 표시한다.
+tolabel = bgt[(bgt['L'] > 17) | (bgt['BMK'] >= 14)]
+for idx, row in tolabel.iterrows():
+    label_name = idx.split()[1][:-1]
+    plt.annotate(label_name, (row['L'], row['BMK']))
+
+
+bgt.head()
+
+
+def short_distr(name):
+    wide, narrow = name.split()
+    if narrow.endswith('구'):
+        return wide[:2] + (narrow[:-1] if len(narrow) > 2 else narrow)
+    elif narrow == '고성군': # 고성군은 강원도, 경상남도에 있다.
+        return '고성({})'.format({'강원도': '강원', '경상남도': '경남'}[wide])
+    else:
+        return narrow[:-1]
+
+bgt['shortname'] = list(map(short_distr, bgt.index))
+bgt.head()
+
+
+blockpositions = pd.read_csv('../../../../../p/tiny/2014-12/burgerindex/blockmap-positions.csv', names=range(15))
+blockpositions.head()
+
+flatrows = []
+for y, colcities in blockpositions.iterrows():
+    for x, city in colcities.iteritems():
+        if isinstance(city, str):
+            flatrows.append((x, y, city))
+
+blockpositions_tbl = pd.DataFrame(flatrows, columns=('x', 'y', 'city')).set_index('city').sort_index()
+bgtb = pd.merge(bgt, blockpositions_tbl, how='left', left_on='shortname', right_index=True)
+bgtb.head()
+
+
+bgtb[bgtb['x'].apply(np.isnan)]
+
+from matplotlib import rcParams
+from matplotlib import cm, colors, _cm
+rcParams['font.family'] = 'NanumBarunGothic'
+
+bgtb['BgIdx'] = bgtb['BgIdx'].fillna(0)
+
+
+
+BORDER_LINES = [
+    [(3, 2), (5, 2), (5, 3), (9, 3), (9, 1)], # 인천
+    [(2, 5), (3, 5), (3, 4), (8, 4), (8, 7), (7, 7), (7, 9), (4, 9), (4, 7), (1, 7)], # 서울
+    [(1, 6), (1, 9), (3, 9), (3, 10), (8, 10), (8, 9),
+     (9, 9), (9, 8), (10, 8), (10, 5), (9, 5), (9, 3)], # 경기도
+    [(9, 12), (9, 10), (8, 10)], # 강원도
+    [(10, 5), (11, 5), (11, 4), (12, 4), (12, 5), (13, 5),
+     (13, 4), (14, 4), (14, 2)], # 충청남도
+    [(11, 5), (12, 5), (12, 6), (15, 6), (15, 7), (13, 7),
+     (13, 8), (11, 8), (11, 9), (10, 9), (10, 8)], # 충청북도
+    [(14, 4), (15, 4), (15, 6)], # 대전시
+    [(14, 7), (14, 9), (13, 9), (13, 11), (13, 13)], # 경상북도
+    [(14, 8), (16, 8), (16, 10), (15, 10),
+     (15, 11), (14, 11), (14, 12), (13, 12)], # 대구시
+    [(15, 11), (16, 11), (16, 13)], # 울산시
+    [(17, 1), (17, 3), (18, 3), (18, 6), (15, 6)], # 전라북도
+    [(19, 2), (19, 4), (21, 4), (21, 3), (22, 3), (22, 2), (19, 2)], # 광주시
+    [(18, 5), (20, 5), (20, 6)], # 전라남도
+    [(16, 9), (18, 9), (18, 8), (19, 8), (19, 9), (20, 9), (20, 10)], # 부산시
+]
+def draw_blockcolormap(tbl, datacol, vmin, vmax, whitelabelmin, cmapname, gamma, datalabel, dataticks):
+    cmap = colors.LinearSegmentedColormap(cmapname + 'custom',
+                      getattr(_cm, '_{}_data'.format(cmapname)), gamma=gamma)
+    cmap.set_bad('white', 1.)
+
+    mapdata = tbl.pivot(index='y', columns='x', values=datacol)
+    masked_mapdata = np.ma.masked_where(np.isnan(mapdata), mapdata)
+
+    plt.figure(figsize=(9, 16))
+    plt.pcolor(masked_mapdata, vmin=vmin, vmax=vmax, cmap=cmap,
+               edgecolor='#aaaaaa', linewidth=0.5)
+
+    # 지역 이름 표시
+    for idx, row in tbl.iterrows():
+        annocolor = 'white' if row[datacol] > whitelabelmin else 'black'
+
+        # 광역시는 구 이름이 겹치는 경우가 많아서 시단위 이름도 같이 표시한다. (중구, 서구)
+        if row['d1'].endswith('시') and not row['d1'].startswith('세종'):
+            dispname = '{}\n{}'.format(row['d1'][:2], row['d2'][:-1])
+            if len(row['d2']) <= 2:
+                dispname += row['d2'][-1]
+        else:
+            dispname = row['d2'][:-1]
+
+        # 서대문구, 서귀포시 같이 이름이 3자 이상인 경우에 작은 글자로 표시한다.
+        if len(dispname.splitlines()[-1]) >= 3:
+            fontsize, linespacing = 12, 1.2
+        else:
+            fontsize, linespacing = 14, 1.03
+
+        plt.annotate(dispname, (row['x']+0.5, row['y']+0.5), weight='bold',
+                     fontsize=fontsize, ha='center', va='center', color=annocolor,
+                     linespacing=linespacing)
+
+    # 시도 경계 그린다.
+    for path in BORDER_LINES:
+        ys, xs = zip(*path)
+        plt.plot(xs, ys, c='black', lw=2)
+
+    plt.gca().invert_yaxis()
+    plt.gca().set_aspect(1)
+
+    plt.axis('off')
+    
+    cb = plt.colorbar(shrink=.1, aspect=10)
+    cb.set_label(datalabel)
+    cb.set_ticks(dataticks)
+
+    plt.tight_layout()
+#자, 이제 긴장되는 버거지수 지도 그리는 순간!
+
+draw_blockcolormap(bgtb, 'BgIdx', 0, 3, 1.42, 'Blues', 0.75, '버거지수', np.arange(0, 3.1, 0.5))
+plt.savefig('bmap-burgerindex.pdf')
+
+bgtb['Lp10T'] = bgtb['L'] / bgtb['population'] * 10000
+draw_blockcolormap(bgtb, 'Lp10T', 0, 1, 0.45, 'YlGn', 1, '1만명당 롯데리아 점포수', np.arange(0, 1.1, 0.2))
+plt.savefig('bmap-lotteria.pdf')
+
+
+bgtb['BMKp10T'] = bgtb['BMK'] / bgtb['population'] * 10000
+draw_blockcolormap(bgtb, 'BMKp10T', 0, 1, 0.45, 'YlGn', 1, '1만명당 버거킹+맥도날드+KFC 점포수', np.arange(0, 1.1, 0.2))
+plt.savefig('bmap-bmkshops.pdf')
+
+
+bgtb['Bp10T'] = bgtb['B'] / bgtb['population'] * 10000
+draw_blockcolormap(bgtb, 'Bp10T', 0, 0.5, 0.25, 'RdPu', 1, '1만명당 버거킹 점포수', np.arange(0, 0.6, 0.1))
+plt.savefig('bmap-burgerking.pdf')
+
+
+bgtb['Mp10T'] = bgtb['M'] / bgtb['population'] * 10000
+draw_blockcolormap(bgtb, 'Mp10T', 0, 0.5, 0.25, 'RdPu', 1, '1만명당 맥도날드 점포수', np.arange(0, 0.6, 0.1))
+plt.savefig('bmap-mcdonalds.pdf')
+
+bgtb['Kp10T'] = bgtb['K'] / bgtb['population'] * 10000
+draw_blockcolormap(bgtb, 'Kp10T', 0, 0.5, 0.25, 'RdPu', 1, '1만명당 KFC 점포수', np.arange(0, 0.6, 0.1))
+plt.savefig('bmap-KFC.pdf')
+
+bgtb['LBMKp10T'] = (bgtb['L'] + bgtb['BMK']) / bgtb['population'] * 10000
+draw_blockcolormap(bgtb, 'LBMKp10T', 0, 2, 0.7, 'Oranges', 0.8, '1만명당 롯데리아/버거킹/맥도날드/KFC 점포수', np.arange(0, 2.1, 0.5))
+plt.savefig('bmap-LBMK.pdf')
+
+bgtb['logdensity'] = np.log10(bgtb['density'])
+draw_blockcolormap(bgtb, 'logdensity', 0, 6, 4, 'Greens', 1, '인구밀도 (명/$km^2$)', np.arange(0, 6.1, 1))
+plt.savefig('bmap-density.pdf')
+
+
+draw_blockcolormap(bgtb, 'area', 0, 1500, 500, 'Greys', 0.6, '면적 ($km^2$)', np.arange(0, 510, 100))
+plt.savefig('bmap-area.pdf')
+
+
+
+plt.figure(figsize=(4, 3))
+subcnt = bgt[['B', 'K', 'L', 'M']]
+subcnt.columns = ['버거킹', 'KFC', '롯데리아', '맥도날드']
+p = subcnt.sum(axis=0).plot(kind='bar')
+plt.setp(p.get_xticklabels(), rotation=0)
+plt.ylabel('매장 수')
+plt.savefig('plot-shops-count.pdf')
+
+fig = plt.figure(figsize=(9, 9))
+
+def plot_nstores(b1, b2, label1, label2):
+    plt.scatter(bgt[b1] + np.random.random(len(bgt)),
+                bgt[b2] + np.random.random(len(bgt)),
+                edgecolor='none', alpha=0.75, s=6, c='black')
+    plt.xlim(-1, 15 if b1 != 'L' else 35)
+    plt.ylim(-1, 15 if b2 != 'L' else 35)
+    plt.xlabel(label1)
+    plt.ylabel(label2)
+    
+    r = scipy.stats.pearsonr(bgt[b1], bgt[b2])
+    plt.annotate('r={:.3f}'.format(r[0]), (9, 12.5), fontsize=14)
+
+bgbrands = [
+    ('B', '버거킹'), ('K', 'KFC'),
+    ('L', '롯데리아'), ('M', '맥드날드'),
+]
+
+for a in range(len(bgbrands) - 1):
+    for b in range(1, len(bgbrands)):
+        if a >= b:
+            continue
+        ax = fig.add_subplot(len(bgbrands)-1, len(bgbrands)-1, a * 3 + b)
+        acol, alabel = bgbrands[a]
+        bcol, blabel = bgbrands[b]
+        plot_nstores(bcol, acol, blabel, alabel)
+
+plt.tight_layout()
+plt.savefig('plot-shopcount-correlations.pdf')
+
+
+
+
+cate = bgt.apply(lambda r: 'S' if (r['M'] <= 5) and (r['L'] <= 2) else (
+                                'L' if r['M'] == 0 or r['L'] / r['M'] > 2.1 else 'M'),
+                 axis=1)
+colors = [{'S': 'gray', 'L': 'green', 'M': 'red'}[c] for c in cate]
+
+plt.figure(figsize=(6, 6))
+plt.scatter(bgt['M'] + np.random.random(len(bgt)),
+            bgt['L'] + np.random.random(len(bgt)), s=8, c=colors, edgecolor='none')
+			
+
+
+fig = plt.figure(figsize=(6, 6))
+ax = fig.add_subplot(1, 1, 1)
+bgt[cate == 'M'].plot(kind='scatter', x='population', y='density', ax=ax, c='red')
+bgt[cate == 'L'].plot(kind='scatter', x='population', y='density', ax=ax, c='green')
+plt.xscale('log')
+plt.yscale('log')
+
+
+
+scipy.stats.mannwhitneyu(bgt.loc[cate == 'M', 'population'], bgt.loc[cate == 'L', 'population'])
+
+
+
+validbgt = bgt.dropna(subset=['BgIdx']).copy()
+validbgt['logBgIdx'] = np.log2(validbgt['BgIdx'])
+validbgt = validbgt.dropna(subset=['logBgIdx'])
+validbgt['logDensity'] = np.log10(validbgt['density'])
+
+fig = plt.figure(figsize=(4, 4))
+ax = fig.add_subplot(1, 1, 1)
+validbgt.plot(kind='scatter', y='logBgIdx', x='logDensity', ax=ax,
+              edgecolor='none', s=8, c='black')
+plt.xlabel('인구밀도 (log$_{10}$ 인/km$^2$)')
+plt.ylabel('버거지수 (log$_2$)')
+
+tau, taup = scipy.stats.kendalltau(validbgt['logBgIdx'], validbgt['logDensity'])
+print("Kendall's tau: {} (p={})".format(tau, taup))
+plt.annotate('$\\tau$ = {:.3f}'.format(tau), (2, 2), fontsize=14)
+
+
+
+
+
+lotteria_per_population = bgt['L'].sum() / bgt['population'].sum()
+lotteria_to_random = bgt['L'] / (lotteria_per_population * bgt['population'])
+
+BK_per_population = (bgt['B'] + bgt['K']).sum() / bgt['population'].sum()
+BK_to_random = (bgt['B'] + bgt['K']) / (BK_per_population * bgt['population'])
+
+mcdonalds_per_population = bgt['M'].sum() / bgt['population'].sum()
+mcdonalds_to_random = bgt['M'] / (mcdonalds_per_population * bgt['population'])
+
+
+
+
+
+
+import rpy2.robjects as ro
+
+def loess_fit(x, y, px=None, model=None, alpha=0.5):
+    if model is None:
+        model = ro.r('y ~ x')
+
+    if px is None:
+        px = np.linspace(min(x), max(x), 22)[1:-1]
+
+    fitframe = ro.DataFrame({'x': ro.FloatVector(x), 'y': ro.FloatVector(y)})
+    loessmodel = ro.r.loess(model, fitframe, span=alpha)
+
+    predframe = ro.DataFrame({'x': ro.FloatVector(px)})
+    predy = ro.r.predict(loessmodel, predframe)
+    preddata = [(x, predy[i]) for i, x in enumerate(px)]
+
+    return np.array(preddata).transpose()
+
+lotteria_trend = loess_fit(np.log10(bgt['density']), lotteria_to_random)
+BK_trend = loess_fit(np.log10(bgt['density']), BK_to_random)
+mcdonalds_trend = loess_fit(np.log10(bgt['density']), mcdonalds_to_random)
+fig = plt.figure(figsize=(10, 4))
+ax = fig.add_subplot(1, 3, 1)
+plt.scatter(np.log10(bgt['density']), lotteria_to_random, s=6, c='black', edgecolor='none')
+plt.axhline(1, lw=2, c='black', alpha=0.2)
+plt.plot(lotteria_trend[0], lotteria_trend[1], c='red', alpha=0.7, lw=1.5, zorder=3)
+plt.ylim(-0.1, 7.0)
+plt.xlabel('인구밀도 (log10 인/$km^2$)')
+plt.ylabel('기대 매장 수 대비 실제 매장 수 비율')
+plt.title('롯데리아')
+
+ax = fig.add_subplot(1, 3, 2)
+plt.scatter(np.log10(bgt['density']), BK_to_random, s=6, c='black', edgecolor='none')
+plt.plot(BK_trend[0], BK_trend[1], c='red', alpha=0.7, lw=1.5, zorder=3)
+plt.axhline(1, lw=2, c='black', alpha=0.2)
+plt.ylim(-0.1, 7.0)
+plt.xlabel('인구밀도 (log10 인/$km^2$)')
+plt.ylabel('기대 매장 수 대비 실제 매장 수 비율')
+plt.title('버거킹+KFC')
+
+ax = fig.add_subplot(1, 3, 3)
+plt.scatter(np.log10(bgt['density']), mcdonalds_to_random, s=6, c='black', edgecolor='none')
+plt.plot(mcdonalds_trend[0], mcdonalds_trend[1], c='red', alpha=0.7, lw=1.5, zorder=3)
+plt.axhline(1, lw=2, c='black', alpha=0.2)
+plt.ylim(-0.1, 7.0)
+plt.xlabel('인구밀도 (log10 인/$km^2$)')
+plt.ylabel('기대 매장 수 대비 실제 매장 수 비율')
+plt.title('맥도날드')
+
+plt.tight_layout()
+
+
+
+
+
+
+def sim_positions(nstores):
+    simulated_nstores = pd.Series([0] * len(bgt), index=bgt.index)
+
+    for i in range(int(nstores)):
+        maxloc = (bgt['population'] / (simulated_nstores + 1)).argmax()
+        simulated_nstores.loc[maxloc] += 1
+
+    return simulated_nstores
+
+sim_BMK = sim_positions(bgt['B'].sum()) + sim_positions(bgt['M'].sum()) + sim_positions(bgt['K'].sum())
+sim_L = sim_positions(bgt['L'].sum())
+
+plt.scatter(bgt['BgIdx'] + np.random.normal(0, 0.05, len(bgt)),
+            sim_BMK / sim_L + np.random.normal(0, 0.05, len(bgt)),
+            s=5, c='black')
+valid = (np.isfinite(bgt['BgIdx']) & (bgt['L'] > 0) & (sim_L > 0) & (sim_BMK > 0))
+pr, pp = scipy.stats.pearsonr(bgt['BgIdx'][valid], sim_BMK[valid] / sim_L[valid])
+plt.ylim(-0.2, 1)
+plt.xlim(-0.2, 5)
+plt.gca().set_aspect(1)
+plt.xlabel('실제 버거지수')
+plt.ylabel('시뮬레이션 결과')
+plt.annotate('r={:.3f}'.format(pr), (3, 0.2))
+
+
+
+
+
+
+import requests
+
+url = '크롤링 대상 페이지'
+req = requests.get(url)
+print(req.encodng)   #'ISO-8859-1'
+
+
+
+req.encoding = 'utf-8'    #인코딩 방식을 utf-8 로 바꿉니다. 
+
+html = req.text
+
+
+
+
+
+
+
+# 한글폴더 Pandas 입력 에러시
+import os
+
+fname = './폴더/파일명.csv'
+fname_change = ''
+for c in fname:
+    if ord(c) <= 255:
+        fname_change += c
+
+pd = pd.read_csv(fname_change)
+
+
+
+
+
+https://m.blog.naver.com/PostView.nhn?blogId=kiddwannabe&logNo=221156319157&navType=tl
+
+
+
+
+
+# requests를 활용하여 온라인상 이미지/자료 다운받기
+  
+import requests
+
+url='다운받을자료주소.jpg'
+savename='파일명.png'
+response=requests.get(url)
+
+with open(savename, "wb") as outfile:
+    outfile.write(response.content)
+
+
+
+
+
+# a 라는 리스트에 긴 숫자를 넣어줌
+a=[]
+for i in range(10000000):
+    a.append(i)
+     
+%time for k in range(1000): 50*k+1000 in a    
+     # 리스트에서 존재여부 확인할 경우 Wall time: 450 ms
+
+b=set(a)
+%time for k in range(1000): 50*k+1000 in b 
+    # Set으로 변경후 존재여부 확인할 경우  Wall time: 0 ns
+
+
+
+
+예시1)
+  def wage_range(x):
+    if x>=6000:
+        return '6천원 이상'
+    elif x>=5000:
+        return '5천원~6천원'
+    else:
+        return '5천원 미만'
+
+data['시급분류']=data.hourly_wage.map(lambda x: wage_range(x))
+
+
+예시2)
+
+def make_brands(x):
+    return str(x)[:5]
+
+products['브랜드코드']=products.자재코드.map(lambda x: make_brands(x))
+
+colum 이름 변경하기
+
+data=data.rename(columns={"기존이름1":"변경이름1", "기존이름2":"변경이름2"})
+ ex) pegi_done=pegi_done.rename(columns={"수량":"폐기완료수량"})
+
+
+
+
+
+import itertools
+
+def find_sublists(seq, sublist):
+    length = len(sublist)
+    for index, value in enumerate(seq):
+        if value == sublist[0] and seq[index:index+length] == sublist:
+            yield index, index+length      
+            # input 이 업데이트될때마다 새롭게 값을 찾아서 리턴해줌
+
+def replace_sublist(seq, target, replacement, maxreplace=None):
+    sublists = find_sublists(seq, target)
+    if maxreplace:
+        sublists = itertools.islice(sublists, maxreplace)
+    for start, end in sublists:
+        seq[start:end] = replacement
+
+활용예)
+
+import itertools
+
+def find_sublists(seq, sublist):
+    length = len(sublist)
+    for index, value in enumerate(seq):
+        if value == sublist[0] and seq[index:index+length] == sublist:
+            yield index, index+length      
+            # input 이 업데이트될때마다 새롭게 값을 찾아서 리턴해줌
+
+def replace_sublist(seq, target, maxreplace=None):
+    sublists = find_sublists(seq, target)
+    if maxreplace:
+        sublists = itertools.islice(sublists, maxreplace)
+    for start, end in sublists:
+        seq[start:end] = []
+
+def main():
+    replace_sublist(changed_exp,["N","?"])
+    replace_sublist(changed_exp,["?","N"])
+    replace_sublist(changed_exp,["?"])
+
+
+
+https://www.it-swarm.dev/ko/python/%ED%8C%90%EB%8B%A4%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C-%ED%94%8C%EB%A1%AF-%EC%83%81%EA%B4%80-%ED%96%89%EB%A0%AC/1052561209/
+
+
+
+https://sikaleo.tistory.com/40
+
+
+
+df[df['A'].isin([3, 6])]
+
+	
+	
 	
 
 
