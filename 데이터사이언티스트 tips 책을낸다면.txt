@@ -45,6 +45,9 @@ text/image processing
 Fraud detection , outlier, abnormaly detection
 
 
+
+
+
 <기타 알고리즘 >
 GPS 처리 : 집/직장 처리, gps load 매칭, 주소, poi 
 => 여러가지를 뽑아낼수 있다. 

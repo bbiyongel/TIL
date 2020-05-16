@@ -17,3 +17,102 @@ WHERE DATA.distance < 3
 출처: https://devzeroty.tistory.com/entry/특정-위치위도-경도에서-반경-안에-드는-장소-SQL로-조회하기 [Dev Story..]
 
 
+https://datascienceschool.net/view-notebook/ef921dc25e01437b9b5c532ba3b89b02/
+
+
+
+distance = c*6371*180/pi*sqrt((currentPosition.lat - targetLat)**2 + 
+                     (currentPosition.long - targetLong)**2)
+					 
+distance < maxDistance					 
+
+distance = 6371*acos(sin(lat1)*sin(lat2)+cos(lat1)cos(lat2)cos(long1-long2))
+
+
+
+def calculate_initial_compass_bearing(pointA, pointB):
+    """
+    Calculates the bearing between two points.
+    The formulae used is the following:
+    θ = atan2(sin(Δlong).cos(lat2),
+              cos(lat1).sin(lat2) − 
+    sin(lat1).cos(lat2).cos(Δlong))
+    :Parameters:
+    - `pointA: The tuple representing the 
+    latitude/longitude for the
+    first point. Latitude and longitude must be in 
+    decimal degrees
+    - `pointB: The tuple representing the latitude/longitude for the
+    second point. Latitude and longitude must be in decimal degrees
+    :Returns:
+    The bearing in degrees
+    :Returns Type:
+    float
+    """
+    if (type(pointA) != tuple) or (type(pointB) != tuple):
+        raise TypeError("Only tuples are supported as arguments")
+
+    lat1 = math.radians(pointA[0])
+    lat2 = math.radians(pointB[0])
+
+    diffLong = math.radians(pointB[1] - pointA[1])
+
+    x = math.sin(diffLong) * math.cos(lat2)
+    y = math.cos(lat1) * math.sin(lat2) - (math.sin(lat1)
+        * math.cos(lat2) * math.cos(diffLong))
+
+    initial_bearing = math.atan2(x, y)
+
+    # Now we have the initial bearing but math.atan2 return values
+    # from -180° to + 180° which is not what we want for a compass bearing
+    # The solution is to normalize the initial bearing as shown below
+    initial_bearing = math.degrees(initial_bearing)
+    compass_bearing = (initial_bearing + 360) % 360
+
+    return compass_bearing
+
+
+bearing = calculate_initial_compass_bearing((44.27364400, -121.17116400),(44.27357900, -121.17006800))
+
+distKm = .01
+lat1 = 44.27364400
+lon1 = -121.17116400
+
+new_coord = vincenty(kilometers=distKm).destination(Point(lat1, lon1), bearing).format_decimal())
+
+
+
+
+
+
+
+
+
+
+
+
+def distance(s_lat, s_lng, e_lat, e_lng):
+    
+    # approximate radius of earth in km
+    R = 6373.0
+    
+    s_lat = s_lat*np.pi/180.0                      
+    s_lng = np.deg2rad(s_lng)     
+    e_lat = np.deg2rad(e_lat)                       
+    e_lng = np.deg2rad(e_lng)  
+    
+    d = np.sin((e_lat - s_lat)/2)**2 + np.cos(s_lat)*np.cos(e_lat) * np.sin((e_lng - s_lng)/2)**2
+    
+    return 2 * R * np.arcsin(np.sqrt(d)) 
+	
+	
+	
+	
+	
+	
+SELECT * FROM Places WHERE acos(sin(1.3963) * sin(Lat) + cos(1.3963) * cos(Lat) * cos(Lon - (-0.6981))) * 6371 <= 1000;
+
+
+
+
+	
