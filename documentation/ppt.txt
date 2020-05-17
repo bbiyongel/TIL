@@ -81,6 +81,13 @@ https://cloudconvert.com/eps-to-wmf
 지도
 https://mapsvg.com/
 
+https://thenounproject.com/
+
+
+http://www.iconarchive.com/
+
+
+
 픽토그램 포인트색 : eps파일 , ctrl shift g 
 
 [ixlr온라인 포토샵]
@@ -200,6 +207,25 @@ ctrl shift 누르고 늘리기 하면 같은 비율로 중앙에서 늘어남
 
 flaticon.com
 thenounproject.com
+https://pixabay.com/ : 무료이미지 , 색깔에 맞춰 이미지 검색 예) 검정색 이미지 
+이미지 복사에서 ppt에 삽입 
+
+https://picjumbo.com/ 표지로 사용하기 좋은 무료이미지 
+배경제거해서 쓴다. 
+https://unsplash.com/   고급이미지 
+http://pngimg.com/   다양한 종류 png , 뒷배경 투명함 
+
+https://uigradients.com/#BlackRos%C3%A9   그라디언트 배경 
+
+https://uigradients.com/#BlackRos%C3%A9   색깔 추출해주는 사이트 
+
+https://www.awwwards.com/   ppt 영감 
+
+모핑효과 > 두번째 슬라이드에 복사 
+
+
+
+
 	 
 
 https://smartstore.naver.com/pptproject
