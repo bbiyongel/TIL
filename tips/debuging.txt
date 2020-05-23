@@ -1,0 +1,68 @@
+
+df = pandas.read_csv(fileName, sep='delimiter', header=None)
+data = pd.read_csv(path, skiprows=2)
+data=pd.read_csv("File_path", sep='\t')
+https://stackoverflow.com/questions/18039057/python-pandas-error-tokenizing-data
+
+col_names = ["col1", "col2", "col3", ...]
+df = pd.read_csv(filename, names=col_names)
+
+df = pd.read_csv("/path/foo.csv", delimiter=';', skiprows=0, low_memory=False)
+
+pd.read_csv(filename, delimiter=",", encoding='utf-8')
+CREATE EXTERNAL TABLE moveProjects (cid string, `end` string, category string)
+STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
+TBLPROPERTIES ("dynamodb.table.name" = "Projects",
+    "dynamodb.column.mapping" = "cid:cid,end:end,category:category");
+
+
+
+
+
+-----Original Message-----
+From: "조영운 책임매니저"<bbiyongel@kia.com> 
+To: "bbiyongel@naver.com"<bbiyongel@naver.com>; 
+Cc: 
+Sent: 2020-05-23 (토) 16:22:14 (GMT+09:00)
+Subject: error 찾아보기
+ 
+
+ParserError: Error tokenizing data. C error: Expected 7 fields in line 83, saw 8
+
+ 
+
+
+\nFAILED: ParseException line 3:11 cannot recognize input near ':' '0' 'string' in column type\n"
+
+ 
+
+
+ 
+
+ 
+
+Permission denied. user=ㅌㅌㅌ is not the owner of inode=GPS_MAPPING_copy_1.csv\nTable ㅌㅌㅌ stats: [numFiles=2, totalSize=187286650]\nOK\nTime taken: 1.273 seconds\n'
+
+	             	
+ 
+
+조영운       책임매니저 / 북경분석부	
+赵映云 Jo Young Woon            +86-(010)5631-1491 / +86-138-1136-1847
+
+ 
+
+ 중국빅데이터센터 / CHINA BIGDATA CENTER
+
+ 现代汽车（中国）投资有限公司大数据中心
+
+ 
+
+ 北京市朝阳区霄云路38号现代汽车大厦20层(100027) Tel: +86-(010)5631-1491  
+ 23Floor 20, Hyundai Motor Tower, NO.38 Xiaoyun Road, Beijing(100027)  kor-mobile : +82-10-2098-7882 
+ 
+
+ 
+
+ 
+
+ 
