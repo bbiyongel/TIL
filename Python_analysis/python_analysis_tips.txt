@@ -6,6 +6,13 @@ https://nittaku.tistory.com/113
 
 
 
+
+
+https://blog.naver.com/slykid/221363047968
+
+https://blog.naver.com/raingo00/221927384330
+
+
 소스) 파이썬 - 가우스 혼합 모델(군집 할당 plot_gmm)
 
  
