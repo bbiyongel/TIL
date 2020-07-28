@@ -1,3 +1,5 @@
+#translate_ppt.py에서 참조 
+
 import os
 import sys
 import json
@@ -50,6 +52,7 @@ txt : 번역할 문자열
 src_lang : 번역할 문자열 언어
 tgt_lang : 번역을 요청할 언어
 '''
+
 def translate(txt, src_lang, tgt_lang):
     encText = urllib.parse.quote(txt)
     data = "source=" + src_lang + "&target=" + tgt_lang + "&text=" + encText
