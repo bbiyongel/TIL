@@ -1,0 +1,3 @@
+원문(src) :早上好  ,   번역(target) : 좋은 아침
+원문(src) :你叫什么名字  ,   번역(target) : 당신 이름이 뭡니까
+원문(src) :test  ,   번역(target) : test

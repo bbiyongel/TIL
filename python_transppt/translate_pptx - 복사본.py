@@ -1,41 +1,12 @@
-# -*- coding: utf-8 -*-
-
 from pptx import Presentation  # python-pptx 라이브러리
-import papa                    # 위에서 만든 파파고 라이브러리
+# import papa                    # 위에서 만든 파파고 라이브러리
 # import pypapago
+
 from pypapago import Translator
-
-# import xlrd
-import xlwt
-import os
-
-# from tkinter import *
-import tkinter as tk
-from tkinter import ttk
-import tkinter.filedialog
-from tkinter import messagebox
-from tkinter.filedialog import askopenfilename
 
 pa_translator = Translator()
 
 # translator = pypapago.Translator()
-
-'''
-번역
-shape : pptx 객체
-src_lang : 번역할 문자열 언어
-tgt_lang : 번역을 요청할 언어
-'''
-#ko Korean
-#en English
-#ja Japanese
-#zh-CN Chinese
-#zh-TW Chinese traditional
-#es Spanish
-#fr French
-#vi Vietnamese
-#th Thai
-#id Indonesia
 
 # pptx의 text를 속성 그대로 살려두고 글자만 변경
 def replace_paragraph_text_retaining_initial_formatting(paragraph, new_text):
@@ -48,8 +19,12 @@ def replace_paragraph_text_retaining_initial_formatting(paragraph, new_text):
         p.remove(run._r)
     paragraph.runs[0].text = new_text
 
-
-
+'''
+번역
+shape : pptx 객체
+src_lang : 번역할 문자열 언어
+tgt_lang : 번역을 요청할 언어
+'''
 def translate(shape, src_lang, tgt_lang):
     for paragraph in shape.text_frame.paragraphs:
         # 문자열 예외 처리 공백..
@@ -57,8 +32,7 @@ def translate(shape, src_lang, tgt_lang):
             continue
         if paragraph.text is '':
             continue             
-
-        # 문자열이 번역할 언어인지 확인 : 언어감지 필요할 경우 
+        # 문자열이 번역할 언어인지 확인
 #         if papa.check_language(paragraph.text) == src_lang:
         if src_lang == src_lang:
             # tgt_lang 언어로 번역
@@ -69,14 +43,8 @@ def translate(shape, src_lang, tgt_lang):
             # 리턴 값이 none이라면 API 에러로 더이상 진행이 안되므로 바로 리턴
             if new_text is None:
                 return False
-#             문자열 표시
-
-            with open('{0}_dictionary.txt'.format(os.path.splitext(src_file)[0]),'a', encoding='utf-8') as f:
-                print('원문(src) :' + paragraph.text + "  ,   번역(target) : " + new_text+'\n')
-                f.write('원문(src) :' + paragraph.text + "  ,   번역(target) : " + new_text+'\n')
-
-
-
+            # 문자열 표시
+            print('원문(src) :' + paragraph.text + "  ,   번역(target) : " + new_text)
             # pptx 해당 문자열 변경
             replace_paragraph_text_retaining_initial_formatting(paragraph, new_text)        
     # 문제없이 번역되었다면 True 리턴
@@ -120,46 +88,11 @@ def run(src_file, tgt_file, src_lang, tgt_lang):
     prs.save(tgt_file)
     return True
 
-
-if __name__ == "__main__":
-    
-    app = tk.Tk() 
-    app.title("중국빅데이터센터 문서번역기")
-    app.geometry('200x300')
-    
-#     app.withdraw()
-#     app.update() 
-    src_file = tk.filedialog.askopenfilename() # 번역할 pptx파일  
-    app.destroy()
-    
-    src_lang = 'zh-CN' # 번역할 언어        zh-CN = 중국어 
+if __name__ == "__main__":    
+    src_file = '원본.pptx' # 번역할 pptx파일    
+    tgt_file = '_번역본.pptx' # 번역되어 저장할 pptx 파일
+    src_lang = 'zh-CN' # 번역할 언어        ja = 일본어
     tgt_lang = 'ko' # 번역을 요청할 언어 ko = 한국어
-#     src_file = '원본.pptx' # 번역할 pptx파일
-    tgt_file = os.path.splitext(src_file)[0]+'_번역본.pptx' # 번역되어 저장할 pptx 파일
-    
-    if os.path.exists('{0}_dictionary.txt'.format(os.path.splitext(src_file)[0])):
-        os.remove('{0}_dictionary.txt'.format(os.path.splitext(src_file)[0]))
-    else:
-        pass
-    
-
-#     def callbackFunc(event):
-#          print("New Element Selected")
-
-    
-#     def clickMe():
-#            messagebox.showinfo("번역실행", str.get())
-#     src_lang = ttk.Combobox()
-#     src_lang['values'] = ('zh-CN', 'ko', 'en','zh-TW')
-#     src_lang.grid(column = 0 , row = 0)
-#     src_lang.current(0)
-# #     action=ttk.Button(text="번역실행", command=clickMe)
-# #     action.grid(column=0, row=1)
-    
-
-    
-    
-#     app.mainloop()
 
     # 번역 시작
     run(src_file, tgt_file, src_lang, tgt_lang)
