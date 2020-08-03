@@ -1,0 +1,53 @@
+import os
+from pypapago import Translator
+import docx
+import time
+
+src_lang = 'zh-CN' # 번역할 언어        zh-CN = 중국어 
+tgt_lang = 'ko' # 번역을 요청할 언어 ko = 한국어
+src_file = "4 客户数据管理平台架构设计文档 Short_For translation.docx"
+tgt_file = os.path.splitext(src_file)[0]+'_번역본.docx'
+
+# def replace_paragraph_text_retaining_initial_formatting_docx(paragraph, new_text):
+#     print('replace func')
+#     n, p = paragraph, new_text
+#     return n
+
+doc = docx.Document(src_file)
+pa_translator = Translator()
+
+
+# 이모티콘 제거
+def rmEmoji_ascii(inputString):
+    return inputString.encode('ascii', 'ignore').decode('ascii')
+
+def rmEmoji(inputData):
+    return inputData.encode('utf-8', 'ignore').decode('utf-8')
+
+
+
+for i in range(0,len(doc.paragraphs)):
+        if doc.paragraphs[i].text is '':
+            pass
+        if doc.paragraphs[i].text is not '':
+            print(doc.paragraphs[i].text)
+            doc.paragraphs[i].text = doc.paragraphs[i].text.replace('\v',' |n')
+            doc.paragraphs[i].text = doc.paragraphs[i].text.replace('\n',' |n')
+            doc.paragraphs[i].text = rmEmoji(doc.paragraphs[i].text)
+            doc.paragraphs[i].text = rmEmoji_ascii(doc.paragraphs[i].text)
+            
+            new_text = pa_translator.translate(doc.paragraphs[i].text, src_lang, tgt_lang)
+            
+            new_text = new_text.replace('|n','\n')
+            
+#             replace_paragraph_text_retaining_initial_formatting_docx(doc.paragraphs, new_text)
+
+            with open('{0}_dictionary.txt'.format(os.path.splitext(src_file)[0]),'a', encoding='utf-8') as f:
+                #print('원문(src) :' + doc.paragraphs[i].text + "  |   번역(target) : " + new_text+'\n')
+                f.write('원문(src) :' + doc.paragraphs[i].text + "  |   번역(target) : " + new_text+'\n\n')
+            
+            
+        time.sleep(2)
+#             doc = replace(doc.paragraphs[i].text, new_text)
+#         tgt_file = os.path.splitext(src_file)[0]+'_번역본.docx'
+        doc.save(tgt_file)
