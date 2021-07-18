@@ -6,4 +6,6 @@
 
 [초5 학부모 대상 코딩 강의 준비](https://blog.naver.com/abccoding/222435187906)
 
+[김천고 2학년 학생들 빅데이터 분야 진로상담](https://blog.naver.com/abccoding/222435297669)
+
 [중국 주재원들의 중국어 고민사항](https://blog.naver.com/abccoding/222435264604)
