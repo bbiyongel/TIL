@@ -9,3 +9,5 @@
 [김천고 2학년 학생들 빅데이터 분야 진로상담](https://blog.naver.com/abccoding/222435297669)
 
 [중국 주재원들의 중국어 고민사항](https://blog.naver.com/abccoding/222435264604)
+
+[파주 운정에서 초등 코딩 교육 어디가 좋나요? ](https://blog.naver.com/abccoding/222437793251)
