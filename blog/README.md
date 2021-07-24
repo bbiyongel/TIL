@@ -18,3 +18,10 @@
 
 [현대자동차 빅데이터 활용 사례](https://blog.naver.com/abccoding/222442032739)
 
+[ABC 코딩스쿨과 동네 코딩 학원의 차이점은?](https://blog.naver.com/abccoding/222444671626)
+
+[파주 운정신도시 살기 좋은가요? 초등맘인데 교육이 걱정돼요](https://blog.naver.com/abccoding/222444666784)
+
+[﻿김천고등학교 빅데이터 진로상담 후기..](https://blog.naver.com/abccoding/222444673818)
+
+
